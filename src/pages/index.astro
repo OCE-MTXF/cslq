@@ -1,50 +1,729 @@
----
-import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
----
+import { useState, useEffect } from 'react';
+import { motion, useAnimation } from 'framer-motion';
+import { Phone, Mail, MapPin, Instagram, Facebook, Twitter, ChevronRight, Calendar, Clock, User } from 'lucide-react';
 
-<!doctype html>
-<html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
-	<body>
-		<Header />
-		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This
-				template serves as a lightweight, minimally-styled starting point for anyone looking to build
-				a personal website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to <a href="https://docs.astro.build/"
-					>read the docs
-				</a> or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out <a
-					href="https://github.com/Charca/astro-blog-template"
-					>astro-blog-template
-				</a> by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
-		</main>
-		<Footer />
-	</body>
-</html>
+const App = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const controls = useAnimation();
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      setIsVisible(scrollY > 100);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    if (isVisible) {
+      controls.start('visible');
+    } else {
+      controls.start('hidden');
+    }
+  }, [controls, isVisible]);
+
+  const fadeInUp = {
+    hidden: { opacity: 0, y: 60 },
+    visible: { opacity: 1, y: 0 }
+  };
+
+  const staggerChildren = {
+    visible: { transition: { staggerChildren: 0.2 } }
+  };
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { 
+      opacity: 1,
+      transition: { 
+        staggerChildren: 0.1,
+        delayChildren: 0.3
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1
+    }
+  };
+
+  const courses = [
+    {
+      id: 1,
+      title: '青少年基础班',
+      age: '7-12岁',
+      description: '培养篮球兴趣，掌握基础运球、投篮和团队协作能力',
+      duration: '90分钟/课',
+      icon: <User size={24} className="text-orange-500" />
+    },
+    {
+      id: 2,
+      title: '青少年进阶班',
+      age: '13-18岁',
+      description: '提升战术意识，强化个人技术，为校队选拔做准备',
+      duration: '120分钟/课',
+      icon: <Clock size={24} className="text-orange-500" />
+    },
+    {
+      id: 3,
+      title: '成人训练营',
+      age: '18岁以上',
+      description: '专业体能训练，实战技巧提升，周末联赛组织',
+      duration: '120分钟/课',
+      icon: <Calendar size={24} className="text-orange-500" />
+    }
+  ];
+
+  const coaches = [
+    {
+      id: 1,
+      name: '常森',
+      title: '创始人/总教练',
+      experience: '前CBA职业球员，10年青少年培训经验',
+      bio: '注重基本功与实战结合，培养学员超过50名进入省市级队伍',
+      image: 'https://placehold.co/300x400/1a1a1a/ffffff?text=Coach+Chang'
+    },
+    {
+      id: 2,
+      name: '李明',
+      title: '技术总监',
+      experience: '国家一级教练员，8年教学经验',
+      bio: '专长球员位置技术训练，擅长发掘学员个人潜力',
+      image: 'https://placehold.co/300x400/1a1a1a/ffffff?text=Coach+Li'
+    },
+    {
+      id: 3,
+      name: '王芳',
+      title: '体能教练',
+      experience: '运动科学硕士，5年专业体能训练经验',
+      bio: '科学制定训练计划，帮助学员提升运动表现与预防伤病',
+      image: 'https://placehold.co/300x400/1a1a1a/ffffff?text=Coach+Wang'
+    }
+  ];
+
+  const facilities = [
+    {
+      id: 1,
+      title: '标准室内球场',
+      description: 'NBA标准尺寸木地板球场，专业照明系统',
+      image: 'https://placehold.co/600x400/1a1a1a/ffffff?text=Indoor+Court'
+    },
+    {
+      id: 2,
+      title: '体能训练中心',
+      description: '专业器械区，配备先进体能测试设备',
+      image: 'https://placehold.co/600x400/1a1a1a/ffffff?text=Training+Center'
+    },
+    {
+      id: 3,
+      title: '康复理疗室',
+      description: '专业运动康复设备，资深理疗师驻场',
+      image: 'https://placehold.co/600x400/1a1a1a/ffffff?text=Recovery+Room'
+    }
+  ];
+
+  const testimonials = [
+    {
+      id: 1,
+      quote: '在常森篮球训练营的一年，孩子不仅球技大幅提升，性格也变得更加自信开朗！',
+      author: '张妈妈 - 10岁学员家长'
+    },
+    {
+      id: 2,
+      quote: '专业系统的训练体系，教练团队认真负责，让我从篮球爱好者成长为校队主力',
+      author: '李同学 - 16岁学员'
+    },
+    {
+      id: 3,
+      quote: '成人的训练课程强度适中又充满乐趣，认识了很多志同道合的球友',
+      author: '王先生 - 成人班学员'
+    }
+  ];
+
+  return (
+    <div className="min-h-screen bg-gray-900 text-white font-sans">
+      {/* 导航栏 */}
+      <nav className={`fixed w-full z-50 transition-all duration-300 ${isVisible ? 'bg-gray-900/95 backdrop-blur-sm py-2' : 'bg-transparent py-4'}`}>
+        <div className="container mx-auto px-4 flex justify-between items-center">
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="flex items-center space-x-2"
+          >
+            <div className="bg-orange-500 w-10 h-10 rounded-full flex items-center justify-center">
+              <span className="font-bold text-2xl text-white">C</span>
+            </div>
+            <span className="text-xl md:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-amber-300">
+              常森篮球
+            </span>
+          </motion.div>
+          
+          {/* 桌面导航 */}
+          <div className="hidden md:flex space-x-10 items-center">
+            {['首页', '课程', '教练', '场地', '学员风采', '联系我们'].map((item, index) => (
+              <motion.a
+                key={item}
+                href={`#${item === '首页' ? 'hero' : item.toLowerCase()}`}
+                className="text-gray-300 hover:text-orange-400 font-medium transition-colors"
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+              >
+                {item}
+              </motion.a>
+            ))}
+            <button className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-full font-medium transition-colors flex items-center">
+              免费体验课 <ChevronRight size={18} className="ml-1" />
+            </button>
+          </div>
+          
+          {/* 移动菜单按钮 */}
+          <button 
+            className="md:hidden text-gray-300 z-50"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            {isMenuOpen ? (
+              <div className="w-6 h-0.5 bg-white mb-1.5 relative before:absolute before:inset-0 before:bg-white before:rotate-45 after:absolute after:inset-0 after:bg-white after:-rotate-45"></div>
+            ) : (
+              <div className="space-y-1.5">
+                <div className="w-6 h-0.5 bg-white"></div>
+                <div className="w-6 h-0.5 bg-white"></div>
+                <div className="w-6 h-0.5 bg-white"></div>
+              </div>
+            )}
+          </button>
+        </div>
+        
+        {/* 移动菜单 */}
+        {isMenuOpen && (
+          <motion.div 
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden bg-gray-900/95 backdrop-blur-sm"
+          >
+            <div className="container mx-auto px-4 py-6 space-y-4">
+              {['首页', '课程', '教练', '场地', '学员风采', '联系我们'].map((item) => (
+                <a
+                  key={item}
+                  href={`#${item === '首页' ? 'hero' : item.toLowerCase()}`}
+                  className="block text-gray-300 hover:text-orange-400 py-2 text-lg font-medium transition-colors"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {item}
+                </a>
+              ))}
+              <button className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-full font-medium mt-2 transition-colors">
+                免费体验课
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </nav>
+
+      {/* 英雄区域 */}
+      <section id="hero" className="pt-32 pb-20 md:pt-40 md:pb-32 bg-gradient-to-b from-gray-900 to-gray-800 relative overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 bg-[url('https://placehold.co/1920x1080/1a1a1a/ffffff?text=Basketball+Training')] bg-cover bg-center opacity-10"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-gray-900 via-transparent to-gray-900"></div>
+        </div>
+        
+        <div className="container mx-auto px-4 relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="max-w-3xl"
+          >
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+              专业篮球训练，成就明日之星
+            </h1>
+            <p className="text-xl text-gray-300 mb-8">
+              常森篮球培训班专注青少年及成人篮球技能提升，由前职业球员领衔的专业教练团队，采用科学训练体系，培养全面发展的篮球人才
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <button className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-8 rounded-full text-lg transition-colors shadow-lg hover:shadow-orange-500/30">
+                立即报名
+              </button>
+              <button className="bg-transparent border-2 border-orange-500 text-orange-400 hover:bg-orange-500/10 font-bold py-3 px-8 rounded-full text-lg transition-colors">
+                课程咨询
+              </button>
+            </div>
+          </motion.div>
+          
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.5 }}
+            className="mt-20"
+          >
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="bg-gray-800/50 p-6 rounded-xl text-center border border-gray-700">
+                <div className="text-4xl font-bold text-orange-400 mb-2">500+</div>
+                <div className="text-gray-300">在训学员</div>
+              </div>
+              <div className="bg-gray-800/50 p-6 rounded-xl text-center border border-gray-700">
+                <div className="text-4xl font-bold text-orange-400 mb-2">8</div>
+                <div className="text-gray-300">专业教练</div>
+              </div>
+              <div className="bg-gray-800/50 p-6 rounded-xl text-center border border-gray-700">
+                <div className="text-4xl font-bold text-orange-400 mb-2">10+</div>
+                <div className="text-gray-300">冠军学员</div>
+              </div>
+              <div className="bg-gray-800/50 p-6 rounded-xl text-center border border-gray-700">
+                <div className="text-4xl font-bold text-orange-400 mb-2">98%</div>
+                <div className="text-gray-300">满意度</div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+        
+        <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-gray-900 to-transparent"></div>
+      </section>
+
+      {/* 课程介绍 */}
+      <section id="课程" className="py-20 bg-gray-800">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={staggerChildren}
+            className="text-center mb-16"
+          >
+            <motion.h2 
+              variants={fadeInUp}
+              className="text-3xl md:text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-amber-300"
+            >
+              专业课程体系
+            </motion.h2>
+            <motion.p 
+              variants={fadeInUp}
+              className="text-gray-300 max-w-2xl mx-auto"
+            >
+              根据学员年龄、身体素质及篮球基础，量身定制科学训练计划
+            </motion.p>
+          </motion.div>
+          
+          <motion.div 
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="grid grid-cols-1 md:grid-cols-3 gap-8"
+          >
+            {courses.map((course, index) => (
+              <motion.div 
+                key={course.id}
+                variants={itemVariants}
+                className="bg-gray-900 rounded-2xl overflow-hidden border border-gray-700 hover:border-orange-500 transition-all duration-300 hover:scale-105"
+              >
+                <div className="p-8">
+                  <div className="mb-6">
+                    <div className="w-16 h-16 rounded-full bg-orange-500/10 flex items-center justify-center mb-4">
+                      {course.icon}
+                    </div>
+                    <h3 className="text-2xl font-bold mb-2">{course.title}</h3>
+                    <div className="text-orange-400 font-medium">{course.age}</div>
+                  </div>
+                  <p className="text-gray-300 mb-6">{course.description}</p>
+                  <div className="flex items-center text-gray-400 mb-6">
+                    <Clock size={18} className="mr-2" />
+                    <span>{course.duration}</span>
+                  </div>
+                  <button className="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-3 rounded-xl transition-colors">
+                    了解详情
+                  </button>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* 教练团队 */}
+      <section id="教练" className="py-20 bg-gradient-to-b from-gray-900 to-gray-800">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={staggerChildren}
+            className="text-center mb-16"
+          >
+            <motion.h2 
+              variants={fadeInUp}
+              className="text-3xl md:text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-amber-300"
+            >
+              专业教练团队
+            </motion.h2>
+            <motion.p 
+              variants={fadeInUp}
+              className="text-gray-300 max-w-2xl mx-auto"
+            >
+              由前职业球员和资深教练组成的专业团队，拥有丰富的教学经验和专业背景
+            </motion.p>
+          </motion.div>
+          
+          <motion.div 
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="grid grid-cols-1 md:grid-cols-3 gap-10"
+          >
+            {coaches.map((coach, index) => (
+              <motion.div 
+                key={coach.id}
+                variants={itemVariants}
+                className="bg-gray-800/50 rounded-2xl overflow-hidden border border-gray-700 transition-all duration-300 hover:border-orange-500"
+              >
+                <div className="relative h-80 overflow-hidden">
+                  <img 
+                    src={coach.image} 
+                    alt={coach.name} 
+                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent"></div>
+                </div>
+                <div className="p-6">
+                  <h3 className="text-2xl font-bold mb-1">{coach.name}</h3>
+                  <div className="text-orange-400 font-medium mb-3">{coach.title}</div>
+                  <div className="text-gray-300 mb-4">{coach.experience}</div>
+                  <p className="text-gray-400 text-sm italic">"{coach.bio}"</p>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* 场地设施 */}
+      <section id="场地" className="py-20 bg-gray-800">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={staggerChildren}
+            className="text-center mb-16"
+          >
+            <motion.h2 
+              variants={fadeInUp}
+              className="text-3xl md:text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-amber-300"
+            >
+              专业训练场地
+            </motion.h2>
+            <motion.p 
+              variants={fadeInUp}
+              className="text-gray-300 max-w-2xl mx-auto"
+            >
+              高标准专业篮球场馆，配备先进的训练设备和康复设施
+            </motion.p>
+          </motion.div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {facilities.map((facility, index) => (
+              <motion.div
+                key={facility.id}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.2 }}
+                className="group relative overflow-hidden rounded-2xl border border-gray-700"
+              >
+                <div className="h-80 overflow-hidden">
+                  <img 
+                    src={facility.image} 
+                    alt={facility.title} 
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div className="absolute bottom-0 left-0 right-0 p-6">
+                    <h3 className="text-2xl font-bold mb-2">{facility.title}</h3>
+                    <p className="text-gray-300">{facility.description}</p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 学员风采 */}
+      <section id="学员风采" className="py-20 bg-gradient-to-b from-gray-900 to-gray-800">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={staggerChildren}
+            className="text-center mb-16"
+          >
+            <motion.h2 
+              variants={fadeInUp}
+              className="text-3xl md:text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-amber-300"
+            >
+              学员风采
+            </motion.h2>
+            <motion.p 
+              variants={fadeInUp}
+              className="text-gray-300 max-w-2xl mx-auto"
+            >
+              见证学员的成长与蜕变，分享他们的篮球故事与成就
+            </motion.p>
+          </motion.div>
+          
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="grid grid-cols-1 lg:grid-cols-3 gap-10 max-w-6xl mx-auto"
+          >
+            {testimonials.map((testimonial, index) => (
+              <motion.div
+                key={testimonial.id}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.2 }}
+                className="bg-gray-800/50 p-8 rounded-2xl border border-gray-700 relative"
+              >
+                <div className="absolute -top-4 -left-4 w-16 h-16 bg-orange-500 rounded-full flex items-center justify-center z-10">
+                  <span className="text-3xl font-bold text-white">"</span>
+                </div>
+                <div className="pt-6">
+                  <p className="text-gray-300 italic mb-6">"{testimonial.quote}"</p>
+                  <div className="flex items-center">
+                    <div className="bg-gray-700 w-12 h-12 rounded-full flex items-center justify-center mr-4">
+                      <span className="font-bold text-lg">{testimonial.author.charAt(0)}</span>
+                    </div>
+                    <div>
+                      <div className="font-bold">{testimonial.author}</div>
+                      <div className="text-orange-400 text-sm">学员/家长</div>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* 联系我们 */}
+      <section id="联系我们" className="py-20 bg-gray-800">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7 }}
+            >
+              <h2 className="text-3xl md:text-4xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-amber-300">
+                联系我们
+              </h2>
+              <p className="text-gray-300 mb-8">
+                无论您有任何疑问或需要咨询课程详情，我们的专业团队随时为您服务。欢迎通过以下方式与我们联系，或直接填写右侧表单，我们将尽快回复您。
+              </p>
+              
+              <div className="space-y-6">
+                <div className="flex items-start space-x-4">
+                  <div className="bg-orange-500/10 p-3 rounded-xl">
+                    <Phone size={24} className="text-orange-400" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold mb-1">咨询电话</h3>
+                    <p className="text-gray-300">+86 138 1234 5678</p>
+                    <p className="text-gray-300">+86 159 8765 4321</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start space-x-4">
+                  <div className="bg-orange-500/10 p-3 rounded-xl">
+                    <Mail size={24} className="text-orange-400" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold mb-1">电子邮箱</h3>
+                    <p className="text-gray-300">info@changsen-basketball.com</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start space-x-4">
+                  <div className="bg-orange-500/10 p-3 rounded-xl">
+                    <MapPin size={24} className="text-orange-400" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold mb-1">训练地址</h3>
+                    <p className="text-gray-300">北京市朝阳区体育中心路88号</p>
+                    <p className="text-gray-300">常森篮球训练基地</p>
+                  </div>
+                </div>
+                
+                <div className="flex space-x-4 pt-4">
+                  {[Instagram, Facebook, Twitter].map((Icon, index) => (
+                    <motion.button
+                      key={index}
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="w-12 h-12 rounded-full bg-gray-700 flex items-center justify-center text-orange-400 hover:bg-orange-500/20 transition-colors"
+                    >
+                      <Icon size={20} />
+                    </motion.button>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+            
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7 }}
+              className="bg-gray-900 rounded-2xl p-8 border border-gray-700"
+            >
+              <h3 className="text-2xl font-bold mb-6">预约体验课</h3>
+              <form className="space-y-6">
+                <div>
+                  <label className="block text-gray-300 mb-2">姓名</label>
+                  <input 
+                    type="text" 
+                    className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    placeholder="请输入您的姓名"
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-300 mb-2">联系电话</label>
+                  <input 
+                    type="tel" 
+                    className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    placeholder="请输入手机号码"
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-300 mb-2">学员年龄</label>
+                  <select 
+                    className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  >
+                    <option>6-8岁</option>
+                    <option>9-12岁</option>
+                    <option>13-15岁</option>
+                    <option>16-18岁</option>
+                    <option>18岁以上</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-gray-300 mb-2">咨询内容</label>
+                  <textarea 
+                    rows="4" 
+                    className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    placeholder="请告诉我们您的需求或疑问"
+                  ></textarea>
+                </div>
+                <button 
+                  type="submit" 
+                  className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 rounded-xl transition-colors text-lg"
+                >
+                  提交预约
+                </button>
+              </form>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* 页脚 */}
+      <footer className="bg-gray-900 py-12 border-t border-gray-800">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div>
+              <div className="flex items-center space-x-2 mb-4">
+                <div className="bg-orange-500 w-10 h-10 rounded-full flex items-center justify-center">
+                  <span className="font-bold text-2xl text-white">C</span>
+                </div>
+                <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-amber-300">
+                  常森篮球
+                </span>
+              </div>
+              <p className="text-gray-400 mb-4">
+                专业篮球培训机构，致力于培养青少年篮球人才，提供科学系统的训练体系。
+              </p>
+              <div className="flex space-x-4">
+                {[Instagram, Facebook, Twitter].map((Icon, index) => (
+                  <button
+                    key={index}
+                    className="w-10 h-10 rounded-full bg-gray-800 text-orange-400 flex items-center justify-center hover:bg-orange-500/20 transition-colors"
+                  >
+                    <Icon size={20} />
+                  </button>
+                ))}
+              </div>
+            </div>
+            
+            <div>
+              <h3 className="text-lg font-bold mb-4">快速链接</h3>
+              <ul className="space-y-2">
+                {['首页', '课程介绍', '教练团队', '场地设施', '学员风采', '联系我们'].map((item) => (
+                  <li key={item}>
+                    <a href={`#${item.toLowerCase()}`} className="text-gray-400 hover:text-orange-400 transition-colors">
+                      {item}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            
+            <div>
+              <h3 className="text-lg font-bold mb-4">课程类别</h3>
+              <ul className="space-y-2">
+                {['青少年基础班', '青少年进阶班', '成人训练营', '暑期特训营', '私教课程'].map((item) => (
+                  <li key={item}>
+                    <a href="#" className="text-gray-400 hover:text-orange-400 transition-colors">
+                      {item}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            
+            <div>
+              <h3 className="text-lg font-bold mb-4">联系我们</h3>
+              <ul className="space-y-3 text-gray-400">
+                <li className="flex items-start">
+                  <MapPin size={18} className="mt-1 mr-3 text-orange-400 flex-shrink-0" />
+                  <span>北京市朝阳区体育中心路88号</span>
+                </li>
+                <li className="flex items-center">
+                  <Phone size={18} className="mr-3 text-orange-400 flex-shrink-0" />
+                  <span>+86 138 1234 5678</span>
+                </li>
+                <li className="flex items-center">
+                  <Mail size={18} className="mr-3 text-orange-400 flex-shrink-0" />
+                  <span>info@changsen-basketball.com</span>
+                </li>
+                <li className="flex items-center">
+                  <Clock size={18} className="mr-3 text-orange-400 flex-shrink-0" />
+                  <span>周一至周日 9:00-21:00</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+          
+          <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-500">
+            <p>© {new Date().getFullYear()} 常森篮球培训班. 保留所有权利.</p>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+};
+
+export default App;
